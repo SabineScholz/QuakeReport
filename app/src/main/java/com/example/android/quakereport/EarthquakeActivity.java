@@ -3,8 +3,11 @@ package com.example.android.quakereport;
 
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +15,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.android.quakereport.model.Earthquake;
 
@@ -37,6 +42,10 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
 
     private static final String LOG_TAG = EarthquakeActivity.class.getSimpleName();
 
+    /** TextView that is displayed when the list is empty */
+    private TextView mEmptyStateTextView;
+
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +54,11 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
 
         // Find a reference to the {@link ListView} in the layout
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
+
+        mEmptyStateTextView = (TextView) findViewById(R.id.empty_list_view);
+        earthquakeListView.setEmptyView(mEmptyStateTextView);
+
+        progressBar = findViewById(R.id.progress_bar);
 
         // Create a new {@link ArrayAdapter} of earthquakes
         adapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
@@ -62,6 +76,16 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
                 openWebPage(currentEarthquake.getUrl());
             }
         });
+
+        // Check whether there is internet connectivity
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo == null || !networkInfo.isConnected()) {
+            progressBar.setVisibility(View.INVISIBLE);
+            mEmptyStateTextView.setText("There is no internet connectivity.");
+            return;
+        }
 
         // Get a reference to the LoaderManager, in order to interact with loaders.
         LoaderManager loaderManager = getLoaderManager();
@@ -90,7 +114,15 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
 
     @Override
     public void onLoadFinished(Loader<List<Earthquake>> loader, List<Earthquake> earthquakes) {
+
+        // Hide loading indicator because the data has been loaded
+        progressBar.setVisibility(View.GONE);
+
+        // Set empty state text to display "No earthquakes found."
+        mEmptyStateTextView.setText("No earthquakes found.");
+
         Log.d(LOG_TAG, "onLoadFinished");
+
         // Clear the adapter of previous earthquake data
         adapter.clear();
 
@@ -99,6 +131,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
         if (earthquakes != null && !earthquakes.isEmpty()) {
             adapter.addAll(earthquakes);
         }
+
     }
 
     @Override
