@@ -62,7 +62,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:text="Feb 2, 2016"
             android:textColor="@color/textColorEarthquakeDetails"
             android:textSize="12sp"/>
 
@@ -72,8 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:textColor="@color/textColorEarthquakeDetails"
-            android:textSize="12sp"
-            android:text="11:30 pm" />
+            android:textSize="12sp" />
 
     </LinearLayout>
 

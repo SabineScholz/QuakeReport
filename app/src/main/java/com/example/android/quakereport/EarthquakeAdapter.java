@@ -1,21 +1,22 @@
 package com.example.android.quakereport;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
-import android.net.Uri;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.android.quakereport.model.Earthquake;
+
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Sabine on 25.03.2018.
@@ -25,7 +26,7 @@ public class EarthquakeAdapter  extends ArrayAdapter<Earthquake> {
 
     Earthquake earthquake;
 
-    public EarthquakeAdapter(Context context, ArrayList<Earthquake> earthquakes) {
+    public EarthquakeAdapter(Context context, List<Earthquake> earthquakes) {
         super(context, 0, earthquakes);
     }
 
@@ -52,7 +53,9 @@ public class EarthquakeAdapter  extends ArrayAdapter<Earthquake> {
         primaryPlaceTextView.setText(getPrimaryPlace(earthquake.getPlace()));
         offsetPlaceTextView.setText(getOffsetPlace(earthquake.getPlace()));
         dateTextView.setText(formatDate(earthquake.getDate()));
+        Log.d("Adapter", "dateTextView: " + formatDate(earthquake.getDate()));
         timeTextView.setText(formatTime(earthquake.getDate()));
+        Log.d("Adapter", "dateTextView: " + formatTime(earthquake.getDate()));
 
         // Set the proper background color on the magnitude circle.
         // Fetch the background from the TextView, which is a GradientDrawable.
