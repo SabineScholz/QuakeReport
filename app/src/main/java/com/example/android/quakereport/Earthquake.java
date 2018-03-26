@@ -1,6 +1,6 @@
 package com.example.android.quakereport;
 
-import java.util.Date;
+import java.util.Calendar;
 
 /**
  * Created by Sabine on 25.03.2018.
@@ -10,9 +10,9 @@ public class Earthquake {
 
     private double magnitude;
     private String place;
-    private Date date;
+    private Calendar date;
 
-    public Earthquake(double magnitude, String place, Date date) {
+    public Earthquake(double magnitude, String place, Calendar date) {
         this.magnitude = magnitude;
         this.place = place;
         this.date = date;
@@ -34,11 +34,11 @@ public class Earthquake {
         this.place = place;
     }
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Calendar date) {
         this.date = date;
     }
 
