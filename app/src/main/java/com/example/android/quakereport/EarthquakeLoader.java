@@ -15,16 +15,20 @@ import java.util.List;
  */
 public class EarthquakeLoader extends AsyncTaskLoader<List<Earthquake>> {
 
-    /** Tag for log messages */
+    /**
+     * Tag for log messages
+     */
     private static final String LOG_TAG = EarthquakeLoader.class.getName();
 
-    /** Query URL */
+    /**
+     * Query URL
+     */
     String url;
 
     /**
      * Constructs a new {@link EarthquakeLoader}.
      *
-     * @param context of the activity
+     * @param context        of the activity
      * @param usgsRequestUrl to load data from
      */
     public EarthquakeLoader(Context context, String usgsRequestUrl) {
@@ -40,7 +44,7 @@ public class EarthquakeLoader extends AsyncTaskLoader<List<Earthquake>> {
 
         Log.d(LOG_TAG, "loadInBackground");
 
-        if(url == null) return null;
+        if (url == null) return null;
 
         // Perform the HTTP request for earthquake data and process the response.
         List<Earthquake> earthquakes = QueryUtils.fetchEarthquakeData(url);

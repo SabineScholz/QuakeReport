@@ -18,10 +18,13 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * Created by Sabine on 25.03.2018.
+ * An {@link EarthquakeAdapter} knows how to create a list item layout for each earthquake
+ * in the data source (a list of {@link Earthquake} objects).
+ *
+ * These list item layouts will be provided to an adapter view like ListView
+ * to be displayed to the user.
  */
-
-public class EarthquakeAdapter  extends ArrayAdapter<Earthquake> {
+public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
     Earthquake earthquake;
 
@@ -29,8 +32,10 @@ public class EarthquakeAdapter  extends ArrayAdapter<Earthquake> {
         super(context, 0, earthquakes);
     }
 
-
-
+    /**
+     * Returns a list item view that displays information about the earthquake at the given position
+     * in the list of earthquakes.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -109,15 +114,15 @@ public class EarthquakeAdapter  extends ArrayAdapter<Earthquake> {
     }
 
     private String getPrimaryPlace(String place) {
-        if(place.contains("km ") && place.contains(" of")){
+        if (place.contains("km ") && place.contains(" of")) {
             String s = place.split(" of")[1];
             return s.substring(1);
         }
         return place;
     }
 
-    private  String getOffsetPlace(String place) {
-        if(place.contains("km ") && place.contains(" of")){
+    private String getOffsetPlace(String place) {
+        if (place.contains("km ") && place.contains(" of")) {
             return place.split(" of")[0] + " of";
         }
         return "Near the";
@@ -128,7 +133,7 @@ public class EarthquakeAdapter  extends ArrayAdapter<Earthquake> {
         return magnitudeFormat.format(magnitude);
     }
 
-    private String formatTime(Calendar date){
+    private String formatTime(Calendar date) {
         SimpleDateFormat sdf = new SimpleDateFormat("h:mm");
         return sdf.format(date.getTime());
     }

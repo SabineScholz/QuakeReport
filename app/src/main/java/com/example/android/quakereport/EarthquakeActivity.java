@@ -30,19 +30,19 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
      */
     private static final String USGS_REQUEST_URL =
             "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
-
-    /** Adapter for the list of earthquakes */
-    private EarthquakeAdapter adapter;
-
     /**
      * Constant value for the earthquake loader ID. We can choose any integer.
      * This really only comes into play if you're using multiple loaders.
      */
     private static final int EARTHQUAKE_LOADER_ID = 1;
-
     private static final String LOG_TAG = EarthquakeActivity.class.getSimpleName();
-
-    /** TextView that is displayed when the list is empty */
+    /**
+     * Adapter for the list of earthquakes
+     */
+    private EarthquakeAdapter adapter;
+    /**
+     * TextView that is displayed when the list is empty
+     */
     private TextView mEmptyStateTextView;
 
     private ProgressBar progressBar;
@@ -78,23 +78,36 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
         });
 
         // Check whether there is internet connectivity
+        if (internetConnection()) {
+            // Get a reference to the LoaderManager, in order to interact with loaders.
+            LoaderManager loaderManager = getLoaderManager();
+
+            // Initialize the loader. Pass in the int ID constant defined above and pass in null for
+            // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
+            // because this activity implements the LoaderCallbacks interface).
+            Log.d(LOG_TAG, "onCreate: loaderManager.initLoader");
+            loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
+
+        } else {
+            // Hide loading indicator so error message will be visible
+            progressBar.setVisibility(View.GONE);
+
+            // Update empty state with no connection error message
+            mEmptyStateTextView.setText("There is no internet connectivity.");
+        }
+    }
+
+    private boolean internetConnection() {
+        // Get a reference to the ConnectivityManager to check state of network connectivity
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Get details on the currently active default data network
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo == null || !networkInfo.isConnected()) {
-            progressBar.setVisibility(View.INVISIBLE);
-            mEmptyStateTextView.setText("There is no internet connectivity.");
-            return;
+            return false;
         }
-
-        // Get a reference to the LoaderManager, in order to interact with loaders.
-        LoaderManager loaderManager = getLoaderManager();
-
-        // Initialize the loader. Pass in the int ID constant defined above and pass in null for
-        // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
-        // because this activity implements the LoaderCallbacks interface).
-        Log.d(LOG_TAG, "onCreate: loaderManager.initLoader");
-        loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
+        return true;
     }
 
     private void openWebPage(String url) {
@@ -131,7 +144,6 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
         if (earthquakes != null && !earthquakes.isEmpty()) {
             adapter.addAll(earthquakes);
         }
-
     }
 
     @Override

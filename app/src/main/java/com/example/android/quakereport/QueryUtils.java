@@ -120,7 +120,7 @@ public final class QueryUtils {
      * Make an HTTP request to the given URL and return a String as the response.
      */
     private static String makeHttpRequest(URL url) throws IOException {
-        if(url == null) return null;
+        if (url == null) return null;
 
         String jsonResponse = null;
 
@@ -133,7 +133,7 @@ public final class QueryUtils {
             httpURLConnection.setRequestMethod("GET");
             httpURLConnection.connect();
 
-            if(httpURLConnection.getResponseCode() == 200) {
+            if (httpURLConnection.getResponseCode() == 200) {
 
                 inputStream = httpURLConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
@@ -143,10 +143,10 @@ public final class QueryUtils {
         } catch (IOException e) {
             Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results.", e);
         } finally {
-            if(httpURLConnection != null) {
+            if (httpURLConnection != null) {
                 httpURLConnection.disconnect();
             }
-            if(inputStream != null) {
+            if (inputStream != null) {
                 inputStream.close();
             }
         }
@@ -154,7 +154,7 @@ public final class QueryUtils {
     }
 
     private static String readFromStream(InputStream inputStream) throws IOException {
-        if(inputStream == null) return null;
+        if (inputStream == null) return null;
 
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
