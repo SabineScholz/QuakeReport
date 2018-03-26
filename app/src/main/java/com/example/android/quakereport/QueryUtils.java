@@ -77,7 +77,6 @@ public final class QueryUtils {
                 magnitude = features.getJSONObject(i).getJSONObject("properties").getDouble("mag");
                 place = features.getJSONObject(i).getJSONObject("properties").getString("place");
                 date.setTimeInMillis(features.getJSONObject(i).getJSONObject("properties").getLong("time"));
-                Log.d("Parsing", "date: " + date);
                 url = features.getJSONObject(i).getJSONObject("properties").getString("url");
                 earthquake = new Earthquake(magnitude, place, date, url);
                 earthquakes.add(earthquake);
@@ -98,6 +97,7 @@ public final class QueryUtils {
      * Query the USGS dataset and return an {@link ArrayList<Earthquake>} object to represent a list of earthquakes.
      */
     public static List<Earthquake> fetchEarthquakeData(String requestUrl) {
+        Log.d(LOG_TAG, "fetchEarthquakeData");
 
         // Create URL object
         URL url = createUrl(requestUrl);
